@@ -1,39 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { RichText } from 'prismic-reactjs';
-import Prismic from 'prismic-javascript';
+import React, { useEffect, useState } from "react";
+import { RichText } from "prismic-reactjs";
+import Prismic from "prismic-javascript";
 
-import { Header, PostList, DefaultLayout } from '../components';
-import NotFound from './NotFound';
-import { client } from '../utils/prismicHelpers';
+import { Header, PostList, DefaultLayout } from "../components";
+import NotFound from "./NotFound";
+import { client } from "../utils/prismicHelpers";
 
 /**
  * Blog homepage component
  */
 const BlogHome = () => {
-  const [prismicData, setPrismicData] = useState({ homeDoc: null, blogPosts: null });
+  const [prismicData, setPrismicData] = useState({
+    homeDoc: null,
+    featuredPostRef: null,
+    blogPosts: null,
+  });
   const [notFound, toggleNotFound] = useState(false);
 
   // Get the homepage and blog post documents from Prismic
   useEffect(() => {
     const fetchPrismicData = async () => {
       try {
-        const homeDoc = await client.getSingle('blog_home');
+        const homeDoc = await client.getSingle("blog-home");
+        const featuredPostRef = (await client.getSingle("featured_post")).data
+          .featured_post;
         const blogPosts = await client.query(
-          Prismic.Predicates.at('document.type', 'post'),
-          { orderings: '[my.post.date desc]' }
+          Prismic.Predicates.at("document.type", "post"),
+          { orderings: "[my.post.date desc]" }
         );
-  
         if (homeDoc) {
-          setPrismicData({ homeDoc, blogPosts: blogPosts.results });
+          setPrismicData({
+            homeDoc,
+            featuredPostRef,
+            blogPosts: blogPosts.results,
+          });
         } else {
-          console.warn('Blog Home document was not found. Make sure it exists in your Prismic repository');
+          console.warn(
+            "Blog Home document was not found. Make sure it exists in your Prismic repository"
+          );
           toggleNotFound(true);
         }
       } catch (error) {
         console.error(error);
         toggleNotFound(true);
       }
-    }
+    };
 
     fetchPrismicData();
   }, []);
@@ -42,6 +53,7 @@ const BlogHome = () => {
   if (prismicData.homeDoc) {
     const homeDoc = prismicData.homeDoc;
     const blogPosts = prismicData.blogPosts;
+    const featuredPostRef = prismicData.featuredPostRef;
     const title = RichText.asText(homeDoc.data.headline);
 
     return (
@@ -51,13 +63,13 @@ const BlogHome = () => {
           headline={homeDoc.data.headline}
           description={homeDoc.data.description}
         />
-        <PostList posts={blogPosts} />
+        <PostList posts={blogPosts} featuredPostRef={featuredPostRef} />
       </DefaultLayout>
     );
   } else if (notFound) {
     return <NotFound />;
   }
   return null;
-}
+};
 
 export default BlogHome;

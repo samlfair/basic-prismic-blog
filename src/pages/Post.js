@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { RichText } from 'prismic-reactjs';
+import React, { useEffect, useState } from "react";
+import { RichText } from "prismic-reactjs";
 
-import { DefaultLayout, BackButton, SliceZone } from '../components';
-import NotFound from './NotFound';
-import { client } from '../utils/prismicHelpers';
+import { DefaultLayout, BackButton, SliceZone, Comments } from "../components";
+import NotFound from "./NotFound";
+import { client } from "../utils/prismicHelpers";
 
 /**
  * Blog post page component
@@ -18,19 +18,21 @@ const Post = ({ match }) => {
   useEffect(() => {
     const fetchPrismicData = async () => {
       try {
-        const doc = await client.getByUID('post', uid);
-  
+        const doc = await client.getByUID("post", uid);
+
         if (doc) {
           setPrismicDoc(doc);
         } else {
-          console.warn('Blog post document was not found. Make sure it exists in your Prismic repository');
+          console.warn(
+            "Blog post document was not found. Make sure it exists in your Prismic repository"
+          );
           toggleNotFound(true);
         }
       } catch (error) {
         console.error(error);
         toggleNotFound(true);
       }
-    }
+    };
 
     fetchPrismicData();
   }, [uid]);
@@ -38,9 +40,9 @@ const Post = ({ match }) => {
   // Return the page if a document was retrieved from Prismic
   if (prismicDoc) {
     const title =
-      prismicDoc.data.title.length !== 0 ?
-      RichText.asText(prismicDoc.data.title) :
-      'Untitled';
+      prismicDoc.data.title.length !== 0
+        ? RichText.asText(prismicDoc.data.title)
+        : "Untitled";
 
     return (
       <DefaultLayout wrapperClass="main" seoTitle={title}>
@@ -49,12 +51,15 @@ const Post = ({ match }) => {
           <h1>{title}</h1>
         </div>
         <SliceZone sliceZone={prismicDoc.data.body} />
+        {prismicDoc.data.allowComments === "yes" && (
+          <Comments url={match} title={title} />
+        )}
       </DefaultLayout>
     );
   } else if (notFound) {
     return <NotFound />;
   }
   return null;
-}
+};
 
 export default Post;
