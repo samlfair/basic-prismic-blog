@@ -7,6 +7,24 @@ import NotFound from "./NotFound";
 import { client } from "../utils/prismicHelpers";
 
 /**
+ * GraphQl
+ 
+ import { PrismicLink } from "apollo-link-prismic";
+ import { InMemoryCache } from "apollo-cache-inmemory";
+ import ApolloClient from "apollo-client";
+ import gql from "graphql-tag";
+ 
+ const clientGql = new ApolloClient({
+   link: PrismicLink({
+     uri: "https://sam-onboarding-blog.prismic.io/graphql",
+     accessToken: process.env.REACT_APP_PRISMIC_ACCESS_TOKEN,
+    }),
+    cache: new InMemoryCache(),
+  });
+  
+*/
+
+/**
  * Blog homepage component
  */
 const BlogHome = () => {
@@ -22,16 +40,24 @@ const BlogHome = () => {
     const fetchPrismicData = async () => {
       try {
         const homeDoc = await client.getSingle("blog-home");
-        const featuredPostRef = (await client.getSingle("featured_post")).data
-          .featured_post;
+
+        const featuredPost = (
+          await client.getSingle("featured_post", {
+            fetchLinks: ["post.title", "post.date", "post.uid", "post.body"],
+          })
+        ).data.featured_post;
+
         const blogPosts = await client.query(
-          Prismic.Predicates.at("document.type", "post"),
-          { orderings: "[my.post.date desc]" }
+          Prismic.Predicates.at("document.type", "post", {
+            orderings: "[my.post.date desc]",
+            fetchLinks: ["author.author_name", "author.profile_picture"],
+          })
         );
+
         if (homeDoc) {
           setPrismicData({
             homeDoc,
-            featuredPostRef,
+            featuredPost,
             blogPosts: blogPosts.results,
           });
         } else {
@@ -53,7 +79,7 @@ const BlogHome = () => {
   if (prismicData.homeDoc) {
     const homeDoc = prismicData.homeDoc;
     const blogPosts = prismicData.blogPosts;
-    const featuredPostRef = prismicData.featuredPostRef;
+    const featuredPost = prismicData.featuredPost;
     const title = RichText.asText(homeDoc.data.headline);
 
     return (
@@ -63,7 +89,7 @@ const BlogHome = () => {
           headline={homeDoc.data.headline}
           description={homeDoc.data.description}
         />
-        <PostList posts={blogPosts} featuredPostRef={featuredPostRef} />
+        <PostList posts={blogPosts} featuredPost={featuredPost} />
       </DefaultLayout>
     );
   } else if (notFound) {
