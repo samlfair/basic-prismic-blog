@@ -7,24 +7,6 @@ import NotFound from "./NotFound";
 import { client } from "../utils/prismicHelpers";
 
 /**
- * GraphQl
- 
- import { PrismicLink } from "apollo-link-prismic";
- import { InMemoryCache } from "apollo-cache-inmemory";
- import ApolloClient from "apollo-client";
- import gql from "graphql-tag";
- 
- const clientGql = new ApolloClient({
-   link: PrismicLink({
-     uri: "https://sam-onboarding-blog.prismic.io/graphql",
-     accessToken: process.env.REACT_APP_PRISMIC_ACCESS_TOKEN,
-    }),
-    cache: new InMemoryCache(),
-  });
-  
-*/
-
-/**
  * Blog homepage component
  */
 const BlogHome = () => {
