@@ -44,10 +44,11 @@ const BlogHome = () => {
         }
 
         const blogPosts = await client.query(
-          Prismic.Predicates.at("document.type", "post", {
+          Prismic.Predicates.at("document.type", "post"),
+          {
             orderings: "[my.post.date desc]",
-          }),
-          { fetchLinks: ["author.author_name", "author.profile_picture"] }
+            fetchLinks: ["author.author_name", "author.profile_picture"],
+          }
         );
 
         if (homeDoc) {
