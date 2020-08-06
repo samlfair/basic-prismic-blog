@@ -116,25 +116,6 @@ const BlogHome = () => {
 
   // Get the homepage and blog post documents from Prismic
   useEffect(() => {
-    const featuredGraphQuery = `{
-      featured_post {
-        featured_post {
-          ...on post {
-            title
-            date
-            uid
-            body
-            author {
-              ...on author {
-                author_name
-                profile_picture
-              }
-            }
-          }
-        }
-      }
-    }`;
-
     const fetchPrismicData = async () => {
       try {
         let gqlRes = await gqlClient.query({ query: blogHomeGqlQuery });
@@ -146,15 +127,6 @@ const BlogHome = () => {
         const featuredPost = {
           node: gqlRes.data.allFeatured_posts.edges[0].node.featured_post,
         };
-
-        // const featuredPost = (
-        //   await client.getSingle("featured_post", {
-        //     graphQuery: featuredGraphQuery,
-        //   })
-        // ).data.featured_post;
-
-        // console.log("featuredPost2");
-        // console.log(featuredPost2);
 
         if (homeDoc) {
           setPrismicData({
