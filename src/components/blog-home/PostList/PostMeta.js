@@ -5,7 +5,6 @@ import { Date } from "prismic-reactjs";
  * Post list item date component
  */
 const PostMeta = ({ date, author }) => {
-  console.log(author);
   // Format the date to M d, Y
   const dateFormat = {
     month: "short",

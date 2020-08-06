@@ -7,8 +7,6 @@ import { client } from "../../../utils/prismicHelpers";
  * Post list component
  */
 const PostList = ({ featuredPost, posts }) => {
-  console.log(posts);
-  console.log(featuredPost);
   if (featuredPost.node) {
     posts = posts.filter(
       (post) => post.node._meta.uid !== featuredPost.node._meta.uid

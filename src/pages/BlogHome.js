@@ -17,12 +17,17 @@ import {
   IntrospectionFragmentMatcher,
 } from "apollo-cache-inmemory";
 import ApolloClient from "apollo-client";
+import fragmentTypes from "../utils/fragmentTypes.json";
+
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData: fragmentTypes,
+});
 
 const gqlClient = new ApolloClient({
   link: PrismicLink({
     uri: "https://sam-onboarding-blog.cdn.prismic.io/graphql",
   }),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({ fragmentMatcher }),
 });
 
 const blogHomeGqlQuery = gql`
@@ -40,6 +45,14 @@ const blogHomeGqlQuery = gql`
               author_name
               profile_picture
             }
+          }
+          body {
+            ... on PostBodyText {
+              primary {
+                text
+              }
+            }
+            __typename
           }
         }
       }
@@ -68,6 +81,19 @@ const blogHomeGqlQuery = gql`
                   author_name
                   profile_picture
                 }
+              }
+              body {
+                ... on PostBodyText {
+                  primary {
+                    text
+                  }
+                }
+                ... on PostBodyImage_with_caption {
+                  primary {
+                    image
+                  }
+                }
+                __typename
               }
             }
           }

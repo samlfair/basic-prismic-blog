@@ -1,0 +1,15 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "UNION",
+        "name": "PostBody",
+        "possibleTypes": [
+          { "name": "PostBodyText" },
+          { "name": "PostBodyQuote" },
+          { "name": "PostBodyImage_with_caption" }
+        ]
+      }
+    ]
+  }
+}

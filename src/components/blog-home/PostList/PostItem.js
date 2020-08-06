@@ -16,20 +16,20 @@ const PostItem = ({ featured, post }) => {
     : "Untitled";
   return (
     <div className={"blog-post" + (featured && " featured-post")}>
-      {/* {featured &&
+      {featured &&
         post.node.body.reduce((acc, slice) => {
-          if (slice.slice_type === "image_with_caption") {
+          if (slice.__typename === "PostBodyImage_with_caption") {
             return <img src={slice.primary.image.url} />;
           }
           return acc;
-        }, [])} */}
+        }, [])}
       <div className="container">
         {featured && <span className="featured-tag">Featured</span>}
         <Link to={linkResolver(post)}>
           <h2>{title}</h2>
         </Link>
         <PostMeta date={post.node.date} author={post.node.author} />
-        {/* <FirstParagraph sliceZone={post.node.body} textLimit={300} /> */}
+        <FirstParagraph sliceZone={post.node.body} textLimit={300} />
       </div>
     </div>
   );
