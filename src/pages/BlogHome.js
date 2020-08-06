@@ -58,10 +58,9 @@ const BlogHome = () => {
         const homeDoc = await client.getSingle("blog-home");
 
         const blogPosts = await client.query(
-          Prismic.Predicates.at("document.type", "post", {
-            orderings: "[my.post.date desc]",
-          }),
+          Prismic.Predicates.at("document.type", "post"),
           {
+            orderings: "[my.post.date desc]",
             graphQuery: postsGraphQuery,
           }
         );
