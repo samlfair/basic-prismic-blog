@@ -30,6 +30,9 @@ const blogHomeGqlQuery = gql`
     allPosts {
       edges {
         node {
+          _meta {
+            uid
+          }
           title
           date
           author {
@@ -57,6 +60,9 @@ const blogHomeGqlQuery = gql`
             ... on Post {
               title
               date
+              _meta {
+                uid
+              }
               author {
                 ... on Author {
                   author_name
@@ -65,18 +71,6 @@ const blogHomeGqlQuery = gql`
               }
             }
           }
-        }
-      }
-    }
-  }
-`;
-
-const blogHomeGqlQuery2 = gql`
-  query {
-    allPosts {
-      edges {
-        node {
-          title
         }
       }
     }
@@ -96,21 +90,6 @@ const BlogHome = () => {
 
   // Get the homepage and blog post documents from Prismic
   useEffect(() => {
-    const postsGraphQuery = `{
-      post {
-        title
-        date
-        uid
-        body
-        author {
-          ...on author {
-            author_name
-            profile_picture
-          }
-        }
-      }
-    }`;
-
     const featuredGraphQuery = `{
       featured_post {
         featured_post {
@@ -136,30 +115,26 @@ const BlogHome = () => {
 
         console.log(gqlRes);
 
-        // const homeDoc = await client.getSingle("blog-home");
         const homeDoc = gqlRes.data.allBlogHomes.edges[0].node;
-        console.log(homeDoc);
+        const blogPosts = gqlRes.data.allPosts.edges;
+        const featuredPost = {
+          node: gqlRes.data.allFeatured_posts.edges[0].node.featured_post,
+        };
 
-        const blogPosts = await client.query(
-          Prismic.Predicates.at("document.type", "post", {
-            orderings: "[my.post.date desc]",
-          }),
-          {
-            graphQuery: postsGraphQuery,
-          }
-        );
+        // const featuredPost = (
+        //   await client.getSingle("featured_post", {
+        //     graphQuery: featuredGraphQuery,
+        //   })
+        // ).data.featured_post;
 
-        const featuredPost = (
-          await client.getSingle("featured_post", {
-            graphQuery: featuredGraphQuery,
-          })
-        ).data.featured_post;
+        // console.log("featuredPost2");
+        // console.log(featuredPost2);
 
         if (homeDoc) {
           setPrismicData({
             homeDoc,
             featuredPost,
-            blogPosts: blogPosts.results,
+            blogPosts: blogPosts,
           });
         } else {
           console.warn(

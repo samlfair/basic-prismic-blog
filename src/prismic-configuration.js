@@ -10,6 +10,6 @@ export const accessToken = process.env.REACT_APP_PRISMIC_ACCESS_TOKEN;
 // -- Link resolution rules
 // Manages the url links to internal Prismic documents
 export const linkResolver = (doc) => {
-  if (doc.type === "post") return `/blog/${doc.uid}`;
+  if (doc.node.__typename === "Post") return `/blog/${doc.node._meta.uid}`;
   return "/";
 };
