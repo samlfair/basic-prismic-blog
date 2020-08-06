@@ -46,6 +46,7 @@ const blogHomeGqlQuery = gql`
         node {
           headline
           description
+          image
         }
       }
     }
@@ -135,7 +136,9 @@ const BlogHome = () => {
 
         console.log(gqlRes);
 
-        const homeDoc = await client.getSingle("blog-home");
+        // const homeDoc = await client.getSingle("blog-home");
+        const homeDoc = gqlRes.data.allBlogHomes.edges[0].node;
+        console.log(homeDoc);
 
         const blogPosts = await client.query(
           Prismic.Predicates.at("document.type", "post", {
@@ -178,14 +181,14 @@ const BlogHome = () => {
     const homeDoc = prismicData.homeDoc;
     const blogPosts = prismicData.blogPosts;
     const featuredPost = prismicData.featuredPost;
-    const title = RichText.asText(homeDoc.data.headline);
+    const title = RichText.asText(homeDoc.headline);
 
     return (
       <DefaultLayout seoTitle={title}>
         <Header
-          image={homeDoc.data.image}
-          headline={homeDoc.data.headline}
-          description={homeDoc.data.description}
+          image={homeDoc.image}
+          headline={homeDoc.headline}
+          description={homeDoc.description}
         />
         <PostList posts={blogPosts} featuredPost={featuredPost} />
       </DefaultLayout>
