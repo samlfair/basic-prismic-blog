@@ -37,36 +37,58 @@ const BlogHome = () => {
 
   // Get the homepage and blog post documents from Prismic
   useEffect(() => {
+    const postsGraphQuery = `{
+      post {
+        title
+        date
+        uid
+        body
+        author {
+          ...on author {
+            author_name
+            profile_picture
+          }
+        }
+      }
+    }`;
+
+    const featuredGraphQuery = `{
+      featured_post {
+        featured_post {
+          ...on post {
+            title
+            date
+            uid
+            body
+            author {
+              ...on author {
+                author_name
+                profile_picture
+              }
+            }
+          }
+        }
+      }
+    }`;
+
     const fetchPrismicData = async () => {
       try {
         const homeDoc = await client.getSingle("blog-home");
-
-        const featuredPost = (
-          await client.getSingle("featured_post", {
-            fetchLinks: [
-              "post.title",
-              "post.date",
-              "post.uid",
-              "post.body",
-              "post.author",
-            ],
-          })
-        ).data.featured_post;
-
-        if (featuredPost.uid) {
-          let featuredAuthor = await client.getByUID(
-            "author",
-            featuredPost.data.author.uid
-          );
-          featuredPost.data.author = featuredAuthor;
-        }
 
         const blogPosts = await client.query(
           Prismic.Predicates.at("document.type", "post", {
             orderings: "[my.post.date desc]",
           }),
-          { fetchLinks: ["author.author_name", "author.profile_picture"] }
+          {
+            graphQuery: postsGraphQuery,
+          }
         );
+
+        const featuredPost = (
+          await client.getSingle("featured_post", {
+            graphQuery: featuredGraphQuery,
+          })
+        ).data.featured_post;
 
         if (homeDoc) {
           setPrismicData({
