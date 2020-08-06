@@ -120,8 +120,6 @@ const BlogHome = () => {
       try {
         let gqlRes = await gqlClient.query({ query: blogHomeGqlQuery });
 
-        console.log(gqlRes);
-
         const homeDoc = gqlRes.data.allBlogHomes.edges[0].node;
         const blogPosts = gqlRes.data.allPosts.edges;
         const featuredPost = {

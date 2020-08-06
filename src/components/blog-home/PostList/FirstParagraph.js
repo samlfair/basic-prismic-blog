@@ -5,7 +5,6 @@ import { RichText } from "prismic-reactjs";
  * Component that returns the first paragraph of a post
  */
 const FirstParagraph = ({ sliceZone, textLimit = 300 }) => {
-  console.log(sliceZone);
   // Find the first text slice of post's body
   const firstTextSlice = sliceZone.find(
     (slice) => slice.__typename === "PostBodyText"

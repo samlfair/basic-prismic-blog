@@ -10,7 +10,6 @@ import { linkResolver } from "../../../prismic-configuration";
  * Post list item component
  */
 const PostItem = ({ featured, post }) => {
-  console.log(post);
   const title = RichText.asText(post.node.title)
     ? RichText.asText(post.node.title)
     : "Untitled";
