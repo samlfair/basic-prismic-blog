@@ -6,6 +6,82 @@ import { Header, PostList, DefaultLayout } from "../components";
 import NotFound from "./NotFound";
 import { client } from "../utils/prismicHelpers";
 
+/*
+ * GraphQl
+ */
+
+import gql from "graphql-tag";
+import { PrismicLink } from "apollo-link-prismic";
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} from "apollo-cache-inmemory";
+import ApolloClient from "apollo-client";
+
+const gqlClient = new ApolloClient({
+  link: PrismicLink({
+    uri: "https://sam-onboarding-blog.cdn.prismic.io/graphql",
+  }),
+  cache: new InMemoryCache(),
+});
+
+const blogHomeGqlQuery = gql`
+  query newQuery {
+    allPosts {
+      edges {
+        node {
+          title
+          date
+          author {
+            ... on Author {
+              author_name
+              profile_picture
+            }
+          }
+        }
+      }
+    }
+    allBlogHomes {
+      edges {
+        node {
+          headline
+          description
+        }
+      }
+    }
+    allFeatured_posts {
+      edges {
+        node {
+          featured_post {
+            ... on Post {
+              title
+              date
+              author {
+                ... on Author {
+                  author_name
+                  profile_picture
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const blogHomeGqlQuery2 = gql`
+  query {
+    allPosts {
+      edges {
+        node {
+          title
+        }
+      }
+    }
+  }
+`;
+
 /**
  * Blog homepage component
  */
@@ -55,6 +131,10 @@ const BlogHome = () => {
 
     const fetchPrismicData = async () => {
       try {
+        let gqlRes = await gqlClient.query({ query: blogHomeGqlQuery });
+
+        console.log(gqlRes);
+
         const homeDoc = await client.getSingle("blog-home");
 
         const blogPosts = await client.query(
