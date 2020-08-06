@@ -3,7 +3,6 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { paraisoLight } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 const CodeBlock = ({ slice }) => {
-  console.log(slice);
   return (
     <div className="code-block container">
       <SyntaxHighlighter

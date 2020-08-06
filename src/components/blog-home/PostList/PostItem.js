@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { RichText } from "prismic-reactjs";
 
-import PostDate from "./PostDate";
+import PostMeta from "./PostMeta";
 import FirstParagraph from "./FirstParagraph";
 import { linkResolver } from "../../../prismic-configuration";
 
@@ -10,7 +10,6 @@ import { linkResolver } from "../../../prismic-configuration";
  * Post list item component
  */
 const PostItem = ({ featured, post }) => {
-  console.log(post);
   const title = RichText.asText(post.data.title)
     ? RichText.asText(post.data.title)
     : "Untitled";
@@ -28,8 +27,7 @@ const PostItem = ({ featured, post }) => {
         <Link to={linkResolver(post)}>
           <h2>{title}</h2>
         </Link>
-
-        <PostDate date={post.data.date} />
+        <PostMeta date={post.data.date} author={post.data.author.data} />
         <FirstParagraph sliceZone={post.data.body} textLimit={300} />
       </div>
     </div>

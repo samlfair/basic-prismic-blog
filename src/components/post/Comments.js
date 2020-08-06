@@ -6,7 +6,6 @@ const root = process.env.REACT_APP_ROOT;
 const Comments = ({ url, title }) => {
   return (
     <div className="comments">
-      {console.log(url)}
       <DiscussionEmbed
         className="container"
         shortname={"sam-onboarding-blog"}

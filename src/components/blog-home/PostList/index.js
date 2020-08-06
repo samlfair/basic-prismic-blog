@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PostItem from "./PostItem";
 import Prismic from "prismic-javascript";
 import { client } from "../../../utils/prismicHelpers";

@@ -69,6 +69,11 @@
   margin-right: 20px;
 }
 
+.separator {
+  padding: 0 5px;
+  color: #b6b6b6;
+}
+
 /*
  * Blog post
  */

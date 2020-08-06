@@ -30,7 +30,7 @@ import { client } from "../utils/prismicHelpers";
 const BlogHome = () => {
   const [prismicData, setPrismicData] = useState({
     homeDoc: null,
-    featuredPostRef: null,
+    featuredPost: null,
     blogPosts: null,
   });
   const [notFound, toggleNotFound] = useState(false);
@@ -43,15 +43,29 @@ const BlogHome = () => {
 
         const featuredPost = (
           await client.getSingle("featured_post", {
-            fetchLinks: ["post.title", "post.date", "post.uid", "post.body"],
+            fetchLinks: [
+              "post.title",
+              "post.date",
+              "post.uid",
+              "post.body",
+              "post.author",
+            ],
           })
         ).data.featured_post;
+
+        if (featuredPost.uid) {
+          let featuredAuthor = await client.getByUID(
+            "author",
+            featuredPost.data.author.uid
+          );
+          featuredPost.data.author = featuredAuthor;
+        }
 
         const blogPosts = await client.query(
           Prismic.Predicates.at("document.type", "post", {
             orderings: "[my.post.date desc]",
-            fetchLinks: ["author.author_name", "author.profile_picture"],
-          })
+          }),
+          { fetchLinks: ["author.author_name", "author.profile_picture"] }
         );
 
         if (homeDoc) {
