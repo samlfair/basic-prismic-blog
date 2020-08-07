@@ -1,12 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 /**
  * Post back button component
  */
-const BackButton = () => (
+const BackButton = ({ lang }) => (
   <div className="back">
-    <Link to="/">back to list</Link>
+    <Link to={"/" + lang}>back to list</Link>
   </div>
 );
 
