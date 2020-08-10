@@ -374,31 +374,6 @@
 }
 
 /*
-* Language
-*/
-
-.lang {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 70px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  align-content: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 2em;
-  background: white;
-  box-shadow: 0px 3px 10px lightgrey;
-  transition: all 0.2s;
-}
-
-.lang:hover {
-  margin-bottom: 2px;
-}
-
-/*
  * 404 error page
  */
 .not-found {

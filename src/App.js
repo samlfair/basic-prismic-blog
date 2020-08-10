@@ -22,7 +22,8 @@ const App = () => {
       </Helmet>
       <BrowserRouter>
         <Switch>
-          <Redirect exact from="/:lang/blog/" to="/" />
+          <Redirect exact from="/:lang/blog/" to="/en" />
+          <Redirect exact from="/" to="/en" />
           <Route exact path="/:lang" component={BlogHome} />
           <Route exact path="/preview" component={Preview} />
           <Route exact path="/:lang/blog/:uid" component={Post} />

@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { RichText } from "prismic-reactjs";
 import Prismic from "prismic-javascript";
 
-import { Header, PostList, DefaultLayout, Lang } from "../components";
+import {
+  Header,
+  PostList,
+  DefaultLayout,
+  Lang,
+  SearchBar,
+} from "../components";
 import NotFound from "./NotFound";
 import { client } from "../utils/prismicHelpers";
 
@@ -10,10 +16,7 @@ import { client } from "../utils/prismicHelpers";
  * Blog homepage component
  */
 
-const langs = {
-  fr: "fr-fr",
-  en: "en-us",
-};
+const langs = {};
 
 const BlogHome = ({ match }) => {
   const lang = match.params.lang;
@@ -24,11 +27,18 @@ const BlogHome = ({ match }) => {
     blogPosts: null,
   });
   const [notFound, toggleNotFound] = useState(false);
+  const [searchResults, setSearchResults] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Get the homepage and blog post documents from Prismic
   useEffect(() => {
     const fetchPrismicData = async () => {
       try {
+        // Get languages
+        (await client.getApi("blog-home")).languages.forEach(
+          (lang) => (langs[lang.id.split("-")[0]] = lang.id)
+        );
+
         const homeDoc = await client.getSingle("blog-home", {
           lang: langs[lang],
         });
@@ -46,6 +56,7 @@ const BlogHome = ({ match }) => {
           })
         ).data.featured_post;
 
+        console.log(featuredPost);
         if (featuredPost.uid) {
           let featuredAuthor = await client.getByUID(
             "author",
@@ -99,8 +110,17 @@ const BlogHome = ({ match }) => {
           headline={homeDoc.data.headline}
           description={homeDoc.data.description}
         />
-        <PostList posts={blogPosts} featuredPost={featuredPost} />
-        <Lang match={match} />
+        <SearchBar
+          setResults={setSearchResults}
+          setQuery={setSearchQuery}
+          lang={langs[lang]}
+        />
+        {searchQuery ? (
+          <PostList posts={searchResults} />
+        ) : (
+          <PostList posts={blogPosts} featuredPost={featuredPost} />
+        )}
+        <Lang match={match} languages={homeDoc.alternate_languages} />
       </DefaultLayout>
     );
   } else if (notFound) {

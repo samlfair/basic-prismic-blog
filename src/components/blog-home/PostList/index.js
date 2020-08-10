@@ -7,13 +7,23 @@ import { client } from "../../../utils/prismicHelpers";
  * Post list component
  */
 const PostList = ({ featuredPost, posts }) => {
-  if (featuredPost.uid) {
-    posts = posts.filter((post) => post.uid !== featuredPost.uid);
+  if (featuredPost) {
+    if (featuredPost.uid) {
+      posts = posts.filter((post) => post.uid !== featuredPost.uid);
+    }
   }
   return (
     <div className="blog-main">
-      {featuredPost.uid && (
-        <PostItem key={featuredPost.id} post={featuredPost} featured={true} />
+      {featuredPost && (
+        <>
+          {featuredPost.uid && (
+            <PostItem
+              key={featuredPost.id}
+              post={featuredPost}
+              featured={true}
+            />
+          )}
+        </>
       )}
       {posts.map((post) => (
         <PostItem post={post} key={post.id} />

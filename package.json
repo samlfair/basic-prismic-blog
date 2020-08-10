@@ -8,6 +8,7 @@
     "apollo-link-prismic": "^1.0.7",
     "disqus-react": "^1.0.9",
     "dotenv": "^8.2.0",
+    "flag-icon-css": "^3.5.0",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
     "prismic-javascript": "^3.0.1",

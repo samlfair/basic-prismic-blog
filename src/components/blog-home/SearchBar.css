@@ -1,0 +1,22 @@
+.search-bar {
+  border: none;
+  font-size: 1.3em;
+  padding: 15px 0px;
+  width: 100%;
+}
+
+.search-form {
+  margin: 10px auto 30px auto;
+  border-radius: 2px;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.search-bar::placeholder {
+  color: lightgrey;
+}
+
+.search-bar:focus {
+  outline: none;
+}
