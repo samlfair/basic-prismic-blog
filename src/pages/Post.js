@@ -31,7 +31,14 @@ const Post = ({ match }) => {
   useEffect(() => {
     const fetchPrismicData = async () => {
       try {
-        const doc = await client.getByUID("post", uid, { lang: langs[lang] });
+        // Get languages
+        (await client.getApi("blog-home")).languages.forEach(
+          (lang) => (langs[lang.id.split("-")[0]] = lang.id)
+        );
+
+        const doc = await client.getByUID("post", uid, {
+          lang: langs[lang],
+        });
 
         if (doc) {
           setPrismicDoc(doc);
@@ -67,7 +74,7 @@ const Post = ({ match }) => {
         {prismicDoc.data.allowComments === "yes" && (
           <Comments url={match} title={title} />
         )}
-        <Lang match={match} />
+        <Lang match={match} languages={prismicDoc.alternate_languages} />
       </DefaultLayout>
     );
   } else if (notFound) {

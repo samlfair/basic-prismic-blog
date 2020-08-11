@@ -10,10 +10,10 @@ export const accessToken = process.env.REACT_APP_PRISMIC_ACCESS_TOKEN;
 // -- Link resolution rules
 // Manages the url links to internal Prismic documents
 export const linkResolver = (doc) => {
-  let lang = {
-    "fr-fr": "fr",
-    "en-us": "en",
+  const getLang = (langCode) => {
+    return langCode.split("-")[0];
   };
-  if (doc.type === "post") return `/${lang[doc.lang]}/blog/${doc.uid}`;
+
+  if (doc.type === "post") return `/${getLang(doc.lang)}/blog/${doc.uid}`;
   return "/";
 };

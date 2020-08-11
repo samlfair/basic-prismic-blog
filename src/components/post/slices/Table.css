@@ -1,0 +1,30 @@
+table {
+  font-family: "Lato", sans-serif;
+  margin: 100px auto;
+}
+
+thead {
+  background: lightgrey;
+  color: white;
+  font-weight: bold;
+}
+
+th {
+  border: 1px solid lightgrey;
+}
+
+td {
+  border: 1px solid lightgrey;
+  border-top: none;
+  border-bottom: none;
+}
+
+table {
+  border: 1px solid lightgrey;
+}
+
+td,
+th {
+  text-align: left;
+  padding: 6px;
+}

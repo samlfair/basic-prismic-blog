@@ -23,10 +23,3 @@ const Lang = ({ match, languages }) => {
 };
 
 export default Lang;
-
-// set languages with API request
-// CSS library for flags
-// At content level, use "alternate languages"
-// - Pass alternate language through link resolver
-
-// Add label to hulk image slice

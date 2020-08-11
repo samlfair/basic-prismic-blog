@@ -1,5 +1,12 @@
 import React from "react";
-import { Text, Quote, ImageWithCaption, Embed, CodeBlock } from "./slices";
+import {
+  Text,
+  Quote,
+  ImageWithCaption,
+  Embed,
+  CodeBlock,
+  Table,
+} from "./slices";
 
 /**
  * Post slice zone component
@@ -17,6 +24,8 @@ const SliceZone = ({ sliceZone }) =>
         return <Embed slice={slice} key={`slice-${index}`} />;
       case "code_block":
         return <CodeBlock slice={slice} key={`slice-${index}`} />;
+      case "table":
+        return <Table slice={slice} key={`slice=${index}`} />;
       default:
         return null;
     }
